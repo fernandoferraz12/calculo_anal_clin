@@ -1,5 +1,5 @@
 import streamlit as st
-import math
+#import math
 
 def calcula_ist(tibc, latente_iron):
     ist = (tibc / (tibc + latente_iron)) * 100
