@@ -804,13 +804,37 @@ def calcula_24horas_section():
         st.write(f'Cálcio em 24 Horas (mg/24horas): {resultado_calcio_24horas:.2f}')
 
     #proteina
-    st.header('Preoteína (mg/dL)')
+    st.header('Proteína (mg/dL)')
     proteina = st.number_input('Proteína (mg/dL):')
     volume_24horas_pt = st.number_input('Volume em 24 Horas (mL)(pt):')
 
     if st.button('Calc.Prot'):
         resultado_prot_24horas = calcula_prot_24horas(proteina, volume_24horas_pt)
         st.write(f'Proteína(mg/24 horas): {resultado_prot_24horas:.2f}')
+
+
+def calcula_fg(crt_soro, idade, sexo):
+    if sexo == "Masculino":
+        nao_negros = (186 * (crt_soro ** (-1.154)) * (idade ** (-0.203)))
+        negros = nao_negros * 1.212
+        return nao_negros, negros
+    elif sexo == "Feminino":
+        nao_negros = (186 * (crt_soro ** (-1.154)) * (idade ** (-0.203))) * 0.742
+        negros = ((186 * (crt_soro ** (-1.154)) * (idade ** (-0.203))) * 1.212) * 0.742
+        return nao_negros, negros
+
+
+def calcula_fg_section():
+    st.header('Filtração Glomerular')
+    st.text("Esse cálculo utiliza a formula de MDRD SIMPLIFICADO")
+    crt_soro = st.number_input('Creatinina no soro (mg/dL):')
+    idade = st.number_input('Idade:')
+    sexo = st.selectbox('Sexo:', ('Masculino', 'Feminino'))
+
+    if st.button('Calcular'):
+        resultado_nao_negros, resultado_negros = calcula_fg(crt_soro, idade, sexo)
+        st.write(f'Não Negros: {resultado_nao_negros:.2f}')
+        st.write(f'Negros....: {resultado_negros:.2f}')
 
 
 # inicio da parte grafica
@@ -824,7 +848,7 @@ if escolha == "Humano":
 
     menu_option = st.sidebar.selectbox("Calculos em analises clinicas ", (" ","LDL (Martin)",
 "Glicose Estimada", "Calc. Testosterona", "Calc. Ferro", "Calculo de homa", "Cálcio Iônico", "Prot. Total e frações",
-"Clearence de Creatinina","TAP/INR","Correção de Eritroblastos","Cálcula Urina 24 horas"))
+"Clearence de Creatinina","TAP/INR","Correção de Eritroblastos","Cálcula Urina 24 horas","Filtração Glomerular"))
 
 
     if menu_option == 'Calc. Ferro':
@@ -842,6 +866,9 @@ if escolha == "Humano":
 
         st.text('Gilocose Estimada')
         calcula_glicose()
+
+    elif menu_option == "Filtração Glomerular":
+        calcula_fg_section()
 
     elif menu_option == "TAP/INR":
         calcula_tap_inr_section()
@@ -900,4 +927,4 @@ if escolha == "Humano":
 
 elif escolha == "Veterinário":
 
-    menu_option = st.sidebar.selectbox("Calculos em analises vet ", (" ", "RET" ,"TAP/INR"))
+    menu_option = st.sidebar.selectbox("Calculos em analises vet ", (" "))
