@@ -1,8 +1,12 @@
 import streamlit as st
 import math
 
-def calcula_ist(tibc, latente_iron):
-    ist = (tibc / (tibc + latente_iron)) * 100
+
+
+def calcula_ist(fe, latente_iron):
+
+    tibc = fe + latente_iron
+    ist = (fe / (tibc)) * 100
     return f'TIBC: {tibc}', f'IST: {ist:.2f}%'
 
 
@@ -854,10 +858,10 @@ if escolha == "Humano":
     if menu_option == 'Calc. Ferro':
 
         st.text('Capacidade Total de Fixação do Ferro (TIBC) e Índice de Saturação da Transferrina (IST)')
-        tibc = st.number_input('Digite o valor do Ferro (ug/dL):')
+        fe = st.number_input('Digite o valor do Ferro (ug/dL):')
         latente_iron = st.number_input('Digite o valor da Capacidade Latente Ligação do Ferro:')
         if st.button('Calcular'):
-            resultado_tibc, resultado_ist = calcula_ist(tibc, latente_iron)
+            resultado_tibc, resultado_ist = calcula_ist(fe, latente_iron)
             st.write(resultado_tibc)
             st.write(resultado_ist)
 
